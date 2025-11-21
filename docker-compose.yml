@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service (Backend Store)
+  mlflow_db:
+    image: postgres:14
+    container_name: mlflow_db
+    environment:
+      POSTGRES_USER: mlflow_user
+      POSTGRES_PASSWORD: my_secure_password
+      POSTGRES_DB: mlflow_db
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data # Persist data
+    ports:
+      - "5432:5432"
+    healthcheck: # Ensure database is ready before MLflow starts
+      test: ["CMD-SHELL", "pg_isready -U mlflow_user -d mlflow_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 3. MLflow Tracking Server Service (NOW CUSTOM BUILD)
+  mlflow_server:
+    # Use 'build' instead of 'image' to build the custom Dockerfile
+    build: 
+      context: . 
+      dockerfile: Dockerfile
+    container_name: mlflow_server
+    ports:
+      - "5500:5500" # MLflow UI port
+    environment:
+      # Database URI for the client (optional, but good for completeness)
+      MLFLOW_TRACKING_URI: postgresql://mlflow_user:my_secure_password@mlflow_db:5432/mlflow_db
+      # S3-compatible URI and credentials for the Artifact Store (MinIO)
+      #MLFLOW_S3_ENDPOINT_URL: mlflow_minio:9000
+      #AWS_ACCESS_KEY_ID: minioadmin 
+      #AWS_SECRET_ACCESS_KEY: minio-password
+    volumes:
+      # Map the container's artifact directory to a directory on your host
+      - ./mlflow-artifacts:/mlflow-artifacts
+    # Corrected command to use the backend-store-uri and artifacts-destination
+    command: >
+      mlflow server 
+      --backend-store-uri postgresql://mlflow_user:my_secure_password@mlflow_db:5432/mlflow_db 
+      --artifacts-destination /mlflow-artifacts
+      --host 0.0.0.0 --port 5500 --serve-artifacts
+
+    depends_on:
+      mlflow_db:
+        condition: service_healthy

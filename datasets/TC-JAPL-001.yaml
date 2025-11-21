@@ -1,0 +1,39 @@
+inputs:
+  chat_id: ""
+  language: "java"
+  testing_framework: "playwright"
+  user_query: |
+    "Write a minimal Java Playwright test that opens the homepage and checks if the site title is correct."
+  context:
+    coverable_issues:
+      - summary: "Basic UI visibility"
+        description: "Confirm page opens and title matches expected."
+  test_case:
+    topic: "ui"
+    title: "Homepage title"
+    description: "Minimal UI test for homepage."
+    steps:
+      - step: "Open browser"
+        expected_result: "Browser opens"
+      - step: "Navigate to homepage"
+        expected_result: "Page loads and title matches"
+expectations:
+  code: |
+        "import com.microsoft.playwright.*;
+
+        public class HomepageTest {
+            public static void main(String[] args) {
+                try (Playwright playwright = Playwright.create()) {
+                    Browser browser = playwright.chromium().launch();
+                    Page page = browser.newPage();
+                    page.navigate(\"https://example-store.com\");
+                    assert page.title().contains(\"Example Store\");
+                    browser.close();
+                }
+            }
+        }"
+  imports: |
+        "import com.microsoft.playwright.*;"
+  config_file: |
+        "baseURL=https://example-store.com
+        browser=chromium"

@@ -1,0 +1,78 @@
+inputs:
+  chat_id: ""
+  language: "java"
+  testing_framework: "selenium"
+  user_query: |
+    "Generate a detailed Java Selenium security test for the login form that validates protection against SQL injection, enforces HTTPS, and ensures cookies are Secure and HttpOnly."
+  context:
+    preconditions:
+      - "Login page available at /login."
+      - "Environment supports HTTPS."
+      - "Browser configured to accept SSL certificates."
+    coverable_issues:
+      - summary: "SQL injection prevention"
+        description: |
+          **Feature**: The application must sanitize login inputs.
+          **Acceptance Criteria**:
+          - SQL payloads are rejected without backend errors.
+          - Error message is user-friendly.
+      - summary: "HTTPS enforcement"
+        description: |
+          **Feature**: Authentication must use HTTPS.
+          **Acceptance Criteria**:
+          - URL begins with 'https://'.
+      - summary: "Secure cookies"
+        description: |
+          **Feature**: Authentication cookies must be secure.
+          **Acceptance Criteria**:
+          - Cookies include both Secure and HttpOnly flags.
+  test_case:
+    topic: "security"
+    title: "Login security"
+    description: "Comprehensive security validation of login process."
+    steps:
+      - step: "Open login page"
+        expected_result: "Login page loads securely"
+      - step: "Inject SQL payload"
+        expected_result: "System rejects payload"
+      - step: "Submit valid credentials"
+        expected_result: "Login succeeds via HTTPS"
+      - step: "Verify cookies"
+        expected_result: "Cookies are Secure and HttpOnly"
+expectations:
+  code: |
+        "import org.openqa.selenium.*;
+        import org.openqa.selenium.chrome.ChromeDriver;
+        import java.util.Set;
+
+        public class LoginSecurityTest {
+            public static void main(String[] args) {
+                WebDriver driver = new ChromeDriver();
+                driver.get(\"https://example-store.com/login\");
+
+                driver.findElement(By.name(\"username\")).sendKeys(\"' OR '1'='1\");
+                driver.findElement(By.name(\"password\")).sendKeys(\"fakepass\");
+                driver.findElement(By.cssSelector(\"button[type=submit]\")).click();
+                assert driver.getPageSource().toLowerCase().contains(\"error\");
+
+                driver.navigate().to(\"https://example-store.com/login\");
+                driver.findElement(By.name(\"username\")).sendKeys(\"testuser@example.com\");
+                driver.findElement(By.name(\"password\")).sendKeys(\"Password123\");
+                driver.findElement(By.cssSelector(\"button[type=submit]\")).click();
+                assert driver.getCurrentUrl().startsWith(\"https://\");
+
+                Set<Cookie> cookies = driver.manage().getCookies();
+                for (Cookie cookie : cookies) {
+                    assert cookie.isSecure();
+                    assert cookie.isHttpOnly();
+                }
+                driver.quit();
+            }
+        }"
+  imports: |
+        "import org.openqa.selenium.*;
+        import org.openqa.selenium.chrome.ChromeDriver;
+        import java.util.Set;"
+  config_file: |
+        "baseURL=https://example-store.com/login
+        browser=chrome"

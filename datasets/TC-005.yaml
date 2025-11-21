@@ -1,0 +1,28 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "playwright"
+  user_query: "Modular manual test for account management"
+  context:
+    doc_ids: []
+    preconditions: []
+    coverable_issues: [{"summary":"As a registered user, I can manage my account", "description":"User Story: As a registered user, I want the ability to manage my account details easily, So that I can keep my information up-to-date and accurate.Acceptance Criteria:On the user interface, there is a visible and accessible account profile section.When I hover over the account profile, a menu or option labeled 'Edit Details' is displayed.Upon clicking 'Edit Details', I am presented with a form or modal where I can adjust my account information.The form or modal includes fields for relevant details such as name, email, password, and any other applicable information.I can make adjustments to the information as needed and save the changes.After saving changes, the system updates my account details accordingly.Confirmation or feedback is provided to notify me of the successful update of my account details.Definition of Done:Implementation of a visible and accessible account profile section.Integration of the 'Edit Details' option within the account profile, triggered by a hover action.Creation of a user-friendly form or modal for adjusting account information.Validation of the form to ensure accuracy and completeness of the updated information.Logic to update the account details in the system database upon user confirmation.Implementation of confirmation or feedback messaging for successful updates.Testing to verify the seamless flow of the entire account management process.Code reviewed and merged into the main branch."}]
+  current_code: ""
+  current_imports: ""
+  current_config_file: ""
+  test_case:
+    topic: "ecommerce"
+    title: "Modular manual test for account management"
+    description: "Objective: Verify the functionality of the account management module, ensuring users can perform essential actions related to their accounts.Test Steps:Data-driven manual test for account creation:Navigate to the store home page.Navigate to the account creation page.Input the test data based on the selected test scenario.Submit the account creation form.Verify the expected outcome:Successful account creation (for positive test cases).Edit Account Details:Navigate to the account details editing section.Modify one or more account details (e.g., change email address or update profile information).Save the changes.Verify that the changes are reflected in the account details.Expected Results:Successfully land on the store home page.Successful account creation for valid data.Successful editing of account details with proper reflection.Successful password change and subsequent login with the new password.Successful logout and redirection to the home page.Within this test we are using Test Case Versioning.Test cases evolve when requirements change, or improvements are made to the application under test. Although Xray logs test specification changes in the Jira history, it is not easy to revert to a specific test case version. With Test case versioning, you can now create multiple versions of the same Test allowing you to:Mark specific milestones of the Test with versionsView all previous Test versions and revert to a particular version if needed.Have multiple active versions simultaneously, even of different Test Types, as you can execute them all independently."
+    steps:
+      - step: "Data-driven manual test for account creation"
+        expected_result: ""
+        data: null
+      - step: "Edit account email and personal information"
+        expected_result: "Changes are saved successfully"
+        data: null
+  thinking_budget: 0
+expectations:
+  code: "// expected Java code"
+  imports: "// expected imports"
+  config_file: "<xml/>"

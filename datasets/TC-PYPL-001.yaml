@@ -1,0 +1,36 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "playwright"
+  user_query: |
+    "Create a minimal Playwright Python test that verifies the ecommerce homepage loads successfully."
+  context:
+    preconditions: []
+    coverable_issues:
+      - summary: "Homepage load check"
+        description: "Confirm homepage opens without errors."
+  test_case:
+    topic: "ui"
+    title: "Homepage load"
+    description: "Verify homepage loads correctly."
+    steps:
+      - step: "Launch browser"
+        expected_result: "Browser opens successfully"
+      - step: "Navigate to homepage"
+        expected_result: "Homepage loads without timeout"
+expectations:
+  code: |
+        "from playwright.sync_api import sync_playwright
+
+        def test_homepage_load():
+            with sync_playwright() as p:
+                browser = p.chromium.launch()
+                page = browser.new_page()
+                page.goto('https://example-store.com')
+                assert page.title() == 'Example Store'
+                browser.close()"
+  imports: |
+        "from playwright.sync_api import sync_playwright"
+  config_file: |
+        "baseURL=https://example-store.com
+        headless=true"

@@ -1,0 +1,53 @@
+inputs:
+  chat_id: ""
+  language: "java"
+  testing_framework: "playwright"
+  user_query: |
+    "Write a Java Playwright test that verifies a user can add an item to the cart and the cart count updates accordingly."
+  context:
+    preconditions:
+      - "Product catalog is available on the homepage."
+    coverable_issues:
+      - summary: "Cart update behavior"
+        description: |
+          **Feature**: Adding a product updates cart badge.
+          **Acceptance Criteria**:
+          - Cart icon shows updated item count.
+      - summary: "Button functionality"
+        description: |
+          **Feature**: 'Add to Cart' button triggers the correct action.
+          **Acceptance Criteria**:
+          - Button click adds one unit of the selected item.
+  test_case:
+    topic: "ecommerce"
+    title: "Add to cart"
+    description: "Verify user can add an item to the cart."
+    steps:
+      - step: "Navigate to product page"
+        expected_result: "Product details displayed"
+      - step: "Click 'Add to Cart'"
+        expected_result: "Cart badge updates"
+      - step: "Check cart count"
+        expected_result: "Count increased by one"
+expectations:
+  code: |
+        "import com.microsoft.playwright.*;
+
+        public class AddToCartTest {
+            public static void main(String[] args) {
+                try (Playwright playwright = Playwright.create()) {
+                    Browser browser = playwright.chromium().launch();
+                    Page page = browser.newPage();
+                    page.navigate(\"https://example-store.com/product/123\");
+                    page.click(\"button.add-to-cart\");
+                    String count = page.textContent(\".cart-count\");
+                    assert Integer.parseInt(count) >= 1;
+                    browser.close();
+                }
+            }
+        }"
+  imports: |
+        "import com.microsoft.playwright.*;"
+  config_file: |
+        "baseURL=https://example-store.com/product/123
+        browser=chromium"

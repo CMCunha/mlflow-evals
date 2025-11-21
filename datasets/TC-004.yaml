@@ -1,0 +1,28 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "playwright"
+  user_query: "Data-driven manual test for account creation"
+  context:
+    doc_ids: []
+    preconditions: []
+    coverable_issues: [{"summary":"As a guest I can create an account and log in", "description":"User Story As a registered user, I want to see home page Version B displayed after successfully logging in, So that I can access personalized content, specifically information related to my past purchases.Acceptance Criteria:After successfully logging in, I am directed to home page Version B.Version B includes a section displaying information about my past purchases.The past purchase information is accurate and corresponds to my account history.The overall home page layout and functionality are visually consistent and responsive across different devices.Definition of Done:Implementation of the account creation process with manual form filling.Integration of the confirmation email generation and delivery mechanism.Logic implemented to redirect users to home page Version B after successful login.Testing conducted to validate the entire user flow, including confirmation email receipt and accurate presentation of Version B.Code reviewed and merged into the main branch."}]
+  current_code: ""
+  current_imports: ""
+  current_config_file: ""
+  test_case:
+    topic: "ecommerce"
+    title: "Data-driven manual test for account creation"
+    description: "Objective: Verify the accuracy and reliability of the account creation functionality by testing it with various sets of data.Test Steps:Navigate to the store home page.Navigate to the account creation page.Input the test data based on the selected test scenario.Submit the account creation form.Verify the expected outcome:Successful account creation (for positive test cases).Expected Results:Successfully land on the store home page.Successful account creation for valid data."
+    steps:
+      - step: "Navigate to the store page in ${Browsers}"
+        expected_result: "Successful navigation"
+        data: null
+      - step: "Create a profile for user type ${UserType}"
+        expected_result: "Profile is created successfully and the user is logged in"
+        data: null
+  thinking_budget: 0
+expectations:
+  code: "// expected Java code"
+  imports: "// expected imports"
+  config_file: "<xml/>"

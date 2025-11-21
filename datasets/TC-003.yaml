@@ -1,0 +1,31 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "playwright"
+  user_query: "Add to cart"
+  context:
+    doc_ids: []
+    preconditions: []
+    coverable_issues: [{"summary":"As a guest or registered user, I can remove products from the cart at checkout", "description":"User Story: As a guest or registered user, I want the ability to remove products from the cart during the checkout process, So that I can easily adjust my selection before completing the purchase. Acceptance Criteria:Visibility of Cart Contents:The cart contents are clearly displayed during the checkout process, showing the selected products, quantities, and total cost.Each product in the cart has a visible 'Remove' or 'Delete' option.Intuitive Removal Process:Clicking the 'Remove' or 'Delete' option removes the corresponding product from the cart instantly.Removal action is accompanied by a confirmation prompt to prevent accidental removal.Real-time Cart Update:The cart total and product list are updated in real-time after a product is removed.Users can easily verify the changes made to their cart during the checkout process.Accessibility for Both Guest and Registered Users:Both guest and registered users have the ability to remove products from the cart during checkout.Registered users' cart adjustments are reflected in their account for future sessions.Definition of Done:Implementation of a visible and accessible 'Remove' or 'Delete' option for each product in the cart.Integration of a real-time update mechanism to reflect changes in the cart instantly.Implementation of a confirmation prompt to prevent accidental removal.Seamless functionality for both guest and registered users.Persistent cart adjustments for registered users across sessions.Testing to verify the smooth removal process and real-time updates.Code reviewed and merged into the main branch."}]
+  current_code: ""
+  current_imports: ""
+  current_config_file: ""
+  test_case:
+    topic: "ecommerce"
+    title: "Add to cart"
+    description: "Verify that a user can remove a product from the cart"
+    steps:
+      - step: "Navigate to the product page"
+        expected_result: "The product page is displayed"
+        data: null
+      - step: "Click 'Add to cart'"
+        expected_result: "The system adds the product to the cart"
+        data: null
+      - step: "Open the cart"
+        expected_result: "The cart shows the added product"
+        data: null
+  thinking_budget: 0
+expectations:
+  code: "// expected Java code"
+  imports: "// expected imports"
+  config_file: "<xml/>"

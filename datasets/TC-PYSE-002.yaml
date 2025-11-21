@@ -1,0 +1,67 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "selenium"
+  user_query: |
+    "Generate a detailed Selenium Python test to verify login security. Include SQL injection prevention, HTTPS enforcement, and Secure/HttpOnly cookie validation after authentication."
+  context:
+    preconditions:
+      - "Login endpoint must be active at /login."
+      - "Environment must support HTTPS with valid certificate."
+      - "A valid test user account exists."
+    coverable_issues:
+      - summary: "SQL Injection prevention"
+        description: |
+          **Feature**: Login form input fields must sanitize user input.
+          **Acceptance Criteria**:
+          - Attempted SQL payloads are rejected.
+          - No database or internal error messages displayed.
+      - summary: "HTTPS enforcement"
+        description: |
+          **Feature**: All authentication requests must occur over HTTPS.
+          **Acceptance Criteria**:
+          - Browser’s current URL starts with 'https://'.
+      - summary: "Cookie security"
+        description: |
+          **Feature**: Session cookies must be secure.
+          **Acceptance Criteria**:
+          - All cookies have Secure and HttpOnly flags.
+  test_case:
+    topic: "security"
+    title: "Login form security"
+    description: "Ensure login process is secure against injection and transmission issues."
+    steps:
+      - step: "Open login page"
+        expected_result: "Login form loads over HTTPS"
+        data: "${Base_URL}/login"
+      - step: "Enter SQL payload in username field"
+        expected_result: "Input rejected gracefully"
+        data: "sql_payload=' OR '1'='1"
+      - step: "Submit valid credentials"
+        expected_result: "Login succeeds securely"
+        data: "username=${username}; password=${password}"
+      - step: "Check cookies"
+        expected_result: "Cookies have Secure and HttpOnly flags"
+        data: "cookies=${Session_Cookies}"
+expectations:
+  code: |
+        "from selenium import webdriver
+
+        def test_login_security():
+            driver = webdriver.Chrome()
+            driver.get('https://example-store.com/login')
+            driver.find_element('name','username').send_keys(\"' OR '1'='1\")
+            driver.find_element('name','password').send_keys('test')
+            driver.find_element('css selector','button[type=submit]').click()
+            assert 'error' in driver.page_source.lower()
+            assert driver.current_url.startswith('https://')
+            for cookie in driver.get_cookies():
+                assert cookie.get('secure') and cookie.get('httpOnly')
+            driver.quit()"
+  imports: |
+        "from selenium import webdriver"
+  config_file: |
+        "baseURL=https://example-store.com
+        username=testuser@example.com
+        password=Password123
+        browser=chrome"

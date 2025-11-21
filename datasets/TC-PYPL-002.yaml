@@ -1,0 +1,64 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "playwright"
+  user_query: |
+    "Generate a detailed Playwright Python script to perform a full accessibility audit on the ecommerce checkout page using axe-core. Include validation for ARIA attributes, color contrast, and keyboard navigation accessibility. Fail the test if any critical or serious WCAG 2.1 violations are found."
+  context:
+    preconditions:
+      - "The ecommerce site must be deployed on a staging environment with stable URLs."
+      - "The checkout page must have all form fields implemented with accessible labels."
+      - "axe-core JavaScript library should be available via CDN or local injection."
+    coverable_issues:
+      - summary: "Accessibility audit"
+        description: |
+          **Feature**: The checkout page should comply with WCAG 2.1 AA standards.
+          **Acceptance Criteria**:
+          - No critical or serious accessibility violations are reported by axe-core.
+          - All form elements contain proper `aria-label` or `label` associations.
+      - summary: "Keyboard navigation"
+        description: |
+          **Feature**: Users should be able to navigate the checkout page entirely using the keyboard.
+          **Acceptance Criteria**:
+          - All focusable elements are reachable via Tab/Shift+Tab.
+          - No hidden elements receive focus.
+      - summary: "Color contrast compliance"
+        description: |
+          **Feature**: Text and interactive elements must have sufficient contrast.
+          **Acceptance Criteria**:
+          - Contrast ratio ≥ 4.5:1 for normal text.
+          - No axe-core violations labeled as 'color-contrast'.
+  test_case:
+    topic: "accessibility"
+    title: "Checkout accessibility compliance"
+    description: "Automated accessibility validation using axe-core and Playwright."
+    steps:
+      - step: "Open browser and navigate to checkout page"
+        expected_result: "Checkout page loads completely"
+      - step: "Inject axe-core script"
+        expected_result: "Axe-core loaded successfully"
+      - step: "Run accessibility scan"
+        expected_result: "Accessibility report generated"
+      - step: "Validate results"
+        expected_result: "No critical WCAG 2.1 violations found"
+expectations:
+  code: |
+        "from playwright.sync_api import sync_playwright
+        import json
+
+        def test_checkout_accessibility():
+            with sync_playwright() as p:
+                browser = p.chromium.launch()
+                page = browser.new_page()
+                page.goto('https://example-store.com/checkout')
+                page.add_script_tag(url='https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.4.3/axe.min.js')
+                results = page.evaluate('''async () => await axe.run()''')
+                critical = [v for v in results['violations'] if v['impact'] in ('critical', 'serious')]
+                assert len(critical) == 0, json.dumps(critical, indent=2)
+                browser.close()"
+  imports: |
+        "from playwright.sync_api import sync_playwright
+        import json"
+  config_file: |
+        "baseURL=https://example-store.com/checkout
+        headless=true"

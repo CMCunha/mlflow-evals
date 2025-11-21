@@ -1,0 +1,63 @@
+inputs:
+  chat_id: ""
+  language: "java"
+  testing_framework: "selenium"
+  user_query: |
+    "Generate a Java Selenium test that logs in a valid user and verifies redirection to the dashboard page."
+  context:
+    preconditions:
+      - "A valid user exists with credentials in the test environment."
+      - "Login endpoint available at ${Base_URL}/login."
+    coverable_issues:
+      - summary: "Login process"
+        description: |
+          **Feature**: Valid credentials must authenticate users.
+          **Acceptance Criteria**:
+          - Redirect to dashboard occurs on valid login.
+      - summary: "Error handling"
+        description: |
+          **Feature**: Invalid credentials must show a user-friendly error.
+          **Acceptance Criteria**:
+          - Application displays inline error message.
+  test_case:
+    topic: "authentication"
+    title: "User login flow"
+    description: "Verify valid login redirects to dashboard."
+    steps:
+      - step: "Open login page"
+        expected_result: "Login form visible"
+        data: "${Base_URL}/login"
+      - step: "Enter username and password"
+        expected_result: "Inputs accepted"
+        data: "username=${username}; password=${password}"
+      - step: "Submit login form"
+        expected_result: "Redirect to dashboard"
+        data: "selector=button[type=submit]"
+      - step: "Verify dashboard URL"
+        expected_result: "Dashboard page displayed"
+        data: "${Dashboard_URL}"
+expectations:
+  code: |
+        "import org.openqa.selenium.*;
+        import org.openqa.selenium.chrome.ChromeDriver;
+
+        public class LoginFlowTest {
+            public static void main(String[] args) {
+                WebDriver driver = new ChromeDriver();
+                driver.get(\"https://example-store.com/login\");
+                driver.findElement(By.name(\"email\")).sendKeys(\"testuser@example.com\");
+                driver.findElement(By.name(\"password\")).sendKeys(\"Password123\");
+                driver.findElement(By.cssSelector(\"button[type=submit]\")).click();
+                assert driver.getCurrentUrl().contains(\"dashboard\");
+                driver.quit();
+            }
+        }"
+  imports: |
+        "import org.openqa.selenium.*;
+        import org.openqa.selenium.chrome.ChromeDriver;"
+  config_file: |
+        "baseURL=https://example-store.com
+        username=testuser@example.com
+        password=Password123
+        dashboardURL=https://example-store.com/dashboard
+        browser=chrome"

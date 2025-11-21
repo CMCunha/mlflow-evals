@@ -1,0 +1,37 @@
+inputs:
+  chat_id: ""
+  language: "java"
+  testing_framework: "playwright"
+  user_query: "Multi-version test for Discount Code"
+  context:
+    doc_ids: []
+    preconditions: []
+    coverable_issues: []
+  current_code: ""
+  current_imports: ""
+  current_config_file: ""
+  test_case:
+    topic: "ecommerce"
+    title: "Multi-version test for Discount Code"
+    description: "Objectives:Verify successful application of valid discount codes.Ensure accurate discount calculation and reflection in order totals.Steps:Add one or more items to the shopping cart.Proceed to the checkout page.Locate the designated field for entering a discount code.Enter a valid discount code.Click the 'Apply' button or similar option.Expected Result:The discount code is validated successfully.The applied discount is reflected in the order total, with a breakdown showing the original price and discount amount.Within this test we are using Test Case Versioning.Test cases evolve when requirements change, or improvements are made to the application under test. Although Xray logs test specification changes in the Jira history, it is not easy to revert to a specific test case version. With Test case versioning, you can now create multiple versions of the same Test allowing you to:Mark specific milestones of the Test with versionsView all previous Test versions and revert to a particular version if needed.Have multiple active versions simultaneously, even of different Test Types, as you can execute them all independently."
+    steps:
+      - step: "Add one or more items to the shopping cart"
+        expected_result: "One or more items are added to the shopping cart"
+        data: null
+      - step: "Proceed to the checkout page"
+        expected_result: "User is redirected to the checkout page"
+        data: null
+      - step: "Locate the designated field for entering a discount code"
+        expected_result: "User sees the discount code insert"
+        data: null
+      - step: "Enter a valid discount code"
+        expected_result: "The discount code appears as valid"
+        data: null
+      - step: "Click the 'Apply' button"
+        expected_result: "The discount code is validated successfully.The applied discount is reflected in the order total, with a breakdown showing the original price and discount amount."
+        data: null
+  thinking_budget: 0
+expectations:
+  code: "// expected Java code"
+  imports: "// expected imports"
+  config_file: "<xml/>"

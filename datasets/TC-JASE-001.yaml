@@ -1,0 +1,39 @@
+inputs:
+  chat_id: ""
+  language: "java"
+  testing_framework: "selenium"
+  user_query: |
+    "Create a minimal Java Selenium test that navigates to the homepage and checks if the login button is visible."
+  context:
+    coverable_issues:
+      - summary: "Login button visibility"
+        description: "Verify that the login button appears on the homepage."
+  test_case:
+    topic: "ui"
+    title: "Login button visibility"
+    description: "Check that login button is visible."
+    steps:
+      - step: "Launch browser"
+        expected_result: "Browser opens"
+      - step: "Navigate to homepage"
+        expected_result: "Login button visible"
+expectations:
+  code: |
+        "import org.openqa.selenium.*;
+        import org.openqa.selenium.chrome.ChromeDriver;
+
+        public class LoginButtonTest {
+            public static void main(String[] args) {
+                WebDriver driver = new ChromeDriver();
+                driver.get(\"https://example-store.com\");
+                WebElement login = driver.findElement(By.id(\"login-button\"));
+                assert login.isDisplayed();
+                driver.quit();
+            }
+        }"
+  imports: |
+        "import org.openqa.selenium.*;
+        import org.openqa.selenium.chrome.ChromeDriver;"
+  config_file: |
+        "baseURL=https://example-store.com
+        browser=chrome"

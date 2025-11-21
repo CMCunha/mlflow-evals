@@ -1,0 +1,69 @@
+inputs:
+  chat_id: ""
+  language: "java"
+  testing_framework: "playwright"
+  user_query: |
+    "Generate a detailed Java Playwright test that performs an accessibility audit of the checkout page using axe-core, ensuring compliance with WCAG 2.1, ARIA label correctness, and color contrast validation."
+  context:
+    preconditions:
+      - "Checkout page must be functional and available at ${Base_URL}/checkout."
+      - "All form fields must have visible labels and valid ARIA attributes."
+      - "axe-core JavaScript library must be accessible via CDN."
+    coverable_issues:
+      - summary: "Accessibility compliance"
+        description: |
+          **Feature**: Checkout page must meet WCAG 2.1 AA accessibility standards.
+          **Acceptance Criteria**:
+          - No critical or serious axe-core violations detected.
+          - All input fields have valid ARIA labels.
+      - summary: "Keyboard navigation"
+        description: |
+          **Feature**: Users must navigate via keyboard alone.
+          **Acceptance Criteria**:
+          - All interactive elements tabbable.
+      - summary: "Color contrast"
+        description: |
+          **Feature**: Text and icons must maintain contrast ratio ≥ 4.5:1.
+          **Acceptance Criteria**:
+          - No color-contrast violations in axe-core results.
+  test_case:
+    topic: "accessibility"
+    title: "Checkout accessibility compliance"
+    description: "Automated Playwright audit using axe-core."
+    steps:
+      - step: "Open checkout page"
+        expected_result: "Page loads successfully"
+        data: "${Base_URL}/checkout"
+      - step: "Inject axe-core script"
+        expected_result: "Axe-core loaded"
+        data: "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.4.3/axe.min.js"
+      - step: "Run accessibility audit"
+        expected_result: "Axe-core returns results"
+        data: "wcag_profile=2.1_AA"
+      - step: "Verify results"
+        expected_result: "No critical violations"
+        data: "criteria=no_critical_violations"
+expectations:
+  code: |
+        "import com.microsoft.playwright.*;
+
+        public class AccessibilityAudit {
+            public static void main(String[] args) {
+                try (Playwright playwright = Playwright.create()) {
+                    Browser browser = playwright.chromium().launch();
+                    Page page = browser.newPage();
+                    page.navigate(\"https://example-store.com/checkout\");
+                    page.addScriptTag(new Page.AddScriptTagOptions().setUrl(\"https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.4.3/axe.min.js\"));
+                    Object results = page.evaluate(\"() => axe.run()\");
+                    assert !results.toString().contains(\"critical\");
+                    browser.close();
+                }
+            }
+        }"
+  imports: |
+        "import com.microsoft.playwright.*;"
+  config_file: |
+        "baseURL=https://example-store.com
+        wcagProfile=2.1_AA
+        expectedCriteria=no_critical_violations
+        browser=chromium"

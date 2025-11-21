@@ -1,0 +1,32 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "selenium"
+  user_query: |
+    "Write a minimal Selenium Python test that opens the ecommerce homepage and verifies the title."
+  context:
+    coverable_issues:
+      - summary: "Basic load test"
+        description: "Ensure homepage loads successfully."
+  test_case:
+    topic: "ui"
+    title: "Homepage load"
+    description: "Verify page title matches expected."
+    steps:
+      - step: "Launch browser"
+        expected_result: "Browser opens"
+      - step: "Navigate to homepage"
+        expected_result: "Title matches expected value"
+expectations:
+  code: |
+        "from selenium import webdriver
+
+        def test_homepage_title():
+            driver = webdriver.Chrome()
+            driver.get('https://example-store.com')
+            assert 'Example Store' in driver.title
+            driver.quit()"
+  imports: |
+        "from selenium import webdriver"
+  config_file: |
+        "baseURL=https://example-store.com"
