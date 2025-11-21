@@ -1,0 +1,50 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "selenium"
+  user_query: |
+    Generate a Selenium Python test that adds a product to the shopping cart and verifies the cart count updates.
+  context:
+    preconditions:
+      - summary: "Catalog available"
+        description: "Product catalog is available."
+      - summary: "User logged"
+        description: "User is logged in or session allows cart actions."
+    coverable_issues:
+      - summary: "Cart add functionality"
+        description: |
+          **Feature**: Users can add items to their shopping cart.
+          **Acceptance Criteria**:
+          - Clicking 'Add to Cart' increases cart count by one.
+      - summary: "UI feedback"
+        description: |
+          **Feature**: Cart badge should display correct item count.
+          **Acceptance Criteria**:
+          - Badge updates immediately without refresh.
+  test_case:
+    topic: "ecommerce"
+    title: "Add to cart test"
+    description: "Verify cart counter increments when adding a product."
+    steps:
+      - step: "Navigate to product page"
+        expected_result: "Product details visible"
+      - step: "Click 'Add to cart'"
+        expected_result: "Cart badge increments"
+      - step: "Open cart"
+        expected_result: "Item visible in cart"
+expectations:
+  code: |
+        from selenium import webdriver
+
+        def test_add_to_cart():
+            driver = webdriver.Chrome()
+            driver.get('https://example-store.com/product/123')
+            driver.find_element('css selector', 'button.add-to-cart').click()
+            badge = driver.find_element('css selector', '.cart-count').text
+            assert int(badge) >= 1
+            driver.quit()
+  imports: |
+        from selenium import webdriver
+  config_file: |
+        baseURL=https://example-store.com/product/123
+        browser=chrome

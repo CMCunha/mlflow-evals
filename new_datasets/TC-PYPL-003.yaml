@@ -1,0 +1,60 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "playwright"
+  user_query: |
+    Create a Playwright Python test that verifies a registered user can log in with valid credentials and reach their account dashboard.
+  context:
+    preconditions:
+      - summary: "Account exists"
+        description: "Valid test user account exists."
+    coverable_issues:
+      - summary: "Login functionality"
+        description: |
+          **Feature**: Users must be able to log in using valid credentials.
+          **Acceptance Criteria**:
+          - Login form accepts valid credentials.
+          - Redirect occurs to the user dashboard.
+      - summary: "Error handling"
+        description: |
+          **Feature**: Application must gracefully reject invalid credentials.
+          **Acceptance Criteria**:
+          - Error message appears without page crash.
+  test_case:
+    topic: "authentication"
+    title: "Successful login"
+    description: "Verify user can log in successfully."
+    steps:
+      - step: "Navigate to login page"
+        expected_result: "Login form displayed"
+        data: "${Base_URL}/login"
+      - step: "Enter username and password"
+        expected_result: "Credentials accepted"
+        data: "username=${username}; password=${password}"
+      - step: "Click login"
+        expected_result: "Redirect to dashboard"
+        data: "button=button[type=submit]"
+      - step: "Validate dashboard URL"
+        expected_result: "Dashboard page visible"
+        data: "${Dashboard_URL}"
+expectations:
+  code: |
+        from playwright.sync_api import sync_playwright, expect
+
+        def test_user_login():
+            with sync_playwright() as p:
+                browser = p.chromium.launch()
+                page = browser.new_page()
+                page.goto('https://example-store.com/login')
+                page.fill('input[name=email]', 'testuser@example.com')
+                page.fill('input[name=password]', 'Password123')
+                page.click('button[type=submit]')
+                expect(page).to_have_url('https://example-store.com/dashboard')
+                browser.close()
+  imports: |
+        from playwright.sync_api import sync_playwright, expect
+  config_file: |
+        baseURL=https://example-store.com
+        username=testuser@example.com
+        password=Password123
+        dashboardURL=https://example-store.com/dashboard
