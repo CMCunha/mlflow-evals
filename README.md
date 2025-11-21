@@ -20,6 +20,12 @@ Files present in there have all information necessary to create the tests in Sem
 Add files with tests that you want to achieve.
 
 ### 3. Upload tests to MLFLow
+Adjust variable in the ".env" file to the ones that you use:
+LANGFUSE_PUBLIC_KEY=pk-
+LANGFUSE_SECRET_KEY=sk-
+SEMBIIQ_API_KEY=
+SEMBIIQ_CUSTOMER=
+
 Once all files are created run:
 ```
 python3 create_dataset_from_yaml.py
