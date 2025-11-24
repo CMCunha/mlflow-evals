@@ -3,7 +3,7 @@ inputs:
   language: "java"
   testing_framework: "playwright"
   user_query: |
-    "Write a minimal Java Playwright test that opens the homepage and checks if the site title is correct."
+    Write a minimal Java Playwright test that opens the homepage and checks if the site title is correct.
   context:
     coverable_issues:
       - summary: "Basic UI visibility"

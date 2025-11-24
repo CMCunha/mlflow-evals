@@ -2,8 +2,9 @@ inputs:
   chat_id: ""
   language: "python"
   testing_framework: "selenium"
-  user_query: |
-    Generate a detailed Selenium Python test to verify login security. Include SQL injection prevention, HTTPS enforcement, and Secure/HttpOnly cookie validation after authentication.
+  iterations:
+    - user_query: |
+        Generate a detailed Selenium Python test to verify login security. Include SQL injection prevention, HTTPS enforcement, and Secure/HttpOnly cookie validation after authentication.
   context:
     preconditions:
       - summary: "Login url valid"

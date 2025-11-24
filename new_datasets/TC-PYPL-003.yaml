@@ -2,8 +2,9 @@ inputs:
   chat_id: ""
   language: "python"
   testing_framework: "playwright"
-  user_query: |
-    Create a Playwright Python test that verifies a registered user can log in with valid credentials and reach their account dashboard.
+  iterations:
+    - user_query: |
+        Create a Playwright Python test that verifies a registered user can log in with valid credentials and reach their account dashboard.
   context:
     preconditions:
       - summary: "Account exists"

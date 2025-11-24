@@ -2,8 +2,9 @@ inputs:
   chat_id: ""
   language: "python"
   testing_framework: "playwright"
-  user_query: |
-    Generate a detailed Playwright Python script to perform a full accessibility audit on the ecommerce checkout page using axe-core. Include validation for ARIA attributes, color contrast, and keyboard navigation accessibility. Fail the test if any critical or serious WCAG 2.1 violations are found.
+  iterations:
+    - user_query: |
+        Generate a detailed Playwright Python script to perform a full accessibility audit on the ecommerce checkout page using axe-core. Include validation for ARIA attributes, color contrast, and keyboard navigation accessibility. Fail the test if any critical or serious WCAG 2.1 violations are found.
   context:
     preconditions:
       - summary: "Predeploy staging"

@@ -3,7 +3,7 @@ inputs:
   language: "java"
   testing_framework: "playwright"
   user_query: |
-    "Generate a detailed Java Playwright test that performs an accessibility audit of the checkout page using axe-core, ensuring compliance with WCAG 2.1, ARIA label correctness, and color contrast validation."
+    Generate a detailed Java Playwright test that performs an accessibility audit of the checkout page using axe-core, ensuring compliance with WCAG 2.1, ARIA label correctness, and color contrast validation.
   context:
     preconditions:
       - "Checkout page must be functional and available at ${Base_URL}/checkout."

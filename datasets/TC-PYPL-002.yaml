@@ -3,7 +3,7 @@ inputs:
   language: "python"
   testing_framework: "playwright"
   user_query: |
-    "Generate a detailed Playwright Python script to perform a full accessibility audit on the ecommerce checkout page using axe-core. Include validation for ARIA attributes, color contrast, and keyboard navigation accessibility. Fail the test if any critical or serious WCAG 2.1 violations are found."
+    Generate a detailed Playwright Python script to perform a full accessibility audit on the ecommerce checkout page using axe-core. Include validation for ARIA attributes, color contrast, and keyboard navigation accessibility. Fail the test if any critical or serious WCAG 2.1 violations are found.
   context:
     preconditions:
       - "The ecommerce site must be deployed on a staging environment with stable URLs."
@@ -43,7 +43,7 @@ inputs:
         expected_result: "No critical WCAG 2.1 violations found"
 expectations:
   code: |
-        "from playwright.sync_api import sync_playwright
+        from playwright.sync_api import sync_playwright
         import json
 
         def test_checkout_accessibility():
@@ -55,10 +55,10 @@ expectations:
                 results = page.evaluate('''async () => await axe.run()''')
                 critical = [v for v in results['violations'] if v['impact'] in ('critical', 'serious')]
                 assert len(critical) == 0, json.dumps(critical, indent=2)
-                browser.close()"
+                browser.close()
   imports: |
-        "from playwright.sync_api import sync_playwright
-        import json"
+        from playwright.sync_api import sync_playwright
+        import json
   config_file: |
-        "baseURL=https://example-store.com/checkout
-        headless=true"
+        baseURL=https://example-store.com/checkout
+        headless=true

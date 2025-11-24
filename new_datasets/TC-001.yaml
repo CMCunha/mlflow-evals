@@ -2,7 +2,10 @@ inputs:
   chat_id: ""
   language: "java"
   testing_framework: "playwright"
-  user_query: "Default payment options"
+  iterations:
+    - user_query: "Default payment options"
+    - user_query: "Add another payment option"
+    - user_query: "Add negative payment test case"
   context:
     doc_ids: []
     preconditions: []
