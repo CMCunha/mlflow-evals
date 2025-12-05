@@ -26,7 +26,7 @@ API_HEADERS = {
     'x-provider': os.environ.get('SEMBIIQ_PROVIDER', None),
     'x-llm-key': os.environ.get('SEMBIIQ_LLM_KEY', None),
     'x-model-id': os.environ.get('SEMBIIQ_MODEL_ID', None),
-    'x-advanced-tracing': str(os.environ.get('SEMBIIQ_ADVANCED_TRACING', 'false')).lower(),
+    'x-advanced-tracing': str(os.environ.get('SEMBIIQ_ADVANCED_TRACING', 'true')).lower(),
 }
 
 # =========================================================
@@ -71,6 +71,7 @@ def run_generation(dataset_name='ai_script_test_suite'):
         current_code = inputs.get("current_code", "")
         current_imports = inputs.get("current_imports", "")
         current_config = inputs.get("current_config_file", "")
+        chat_id = inputs.get("chat_id", "") or ""
 
         iterations = inputs.get("iterations", [])
         if not iterations:
@@ -86,7 +87,7 @@ def run_generation(dataset_name='ai_script_test_suite'):
                     print(f"🔁 Iteration {i + 1}: {iteration.get('user_query')}")
 
                     payload = {
-                        "chat_id": inputs.get("chat_id"),
+                        "chat_id": chat_id,
                         "language": inputs.get("language"),
                         "testing_framework": inputs.get("testing_framework"),
                         "user_query": iteration.get("user_query"),
@@ -99,6 +100,12 @@ def run_generation(dataset_name='ai_script_test_suite'):
                     }
 
                     api_response = call_ai_api(payload, i + 1)
+                    # ✅ Capture returned chat_id and reuse it in next iteration
+                    returned_chat_id = api_response.get("chat_id")
+                    if returned_chat_id:
+                        chat_id = returned_chat_id
+                        mlflow.log_param(f"chat_id_iter_{i+1}", chat_id)
+
                     generated_code = api_response.get("code", "")
                     generated_imports = api_response.get("imports", "")
                     generated_config = api_response.get("config_file", "")
@@ -135,7 +142,7 @@ def run_generation(dataset_name='ai_script_test_suite'):
 
                         evaluation_records = [
                             {
-                                "chat_id": payload["chat_id"],
+                                "chat_id": chat_id,
                                 "iteration": i + 1,
                                 "section": "code",
                                 "expected": expected_code,
@@ -146,7 +153,7 @@ def run_generation(dataset_name='ai_script_test_suite'):
                                 "framework": payload["testing_framework"],
                             },
                             {
-                                "chat_id": payload["chat_id"],
+                                "chat_id": chat_id,
                                 "iteration": i + 1,
                                 "section": "imports",
                                 "expected": expected_imports,
@@ -157,7 +164,7 @@ def run_generation(dataset_name='ai_script_test_suite'):
                                 "framework": payload["testing_framework"],
                             },
                             {
-                                "chat_id": payload["chat_id"],
+                                "chat_id": chat_id,
                                 "iteration": i + 1,
                                 "section": "config",
                                 "expected": expected_config,
@@ -246,7 +253,7 @@ def run_generation(dataset_name='ai_script_test_suite'):
                 {
                     "language": inputs.get("language"),
                     "framework": inputs.get("testing_framework"),
-                    "chat_id": inputs.get("chat_id"),
+                    "final_chat_id": chat_id,
                     "total_iterations": len(iterations),
                     "status": "success",
                 }

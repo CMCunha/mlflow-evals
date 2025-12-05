@@ -4,7 +4,7 @@ inputs:
   testing_framework: "selenium"
   iterations:
     - user_query: |
-        Write a minimal Selenium Python test that opens the ecommerce homepage and verifies the title.
+        Write a minimal test that opens the ecommerce homepage and verifies the title.
   context:
     coverable_issues:
       - summary: "Basic load test"

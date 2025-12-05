@@ -4,7 +4,9 @@ inputs:
   testing_framework: "selenium"
   iterations:
     - user_query: |
-        Generate a detailed Selenium Python test to verify login security. Include SQL injection prevention, HTTPS enforcement, and Secure/HttpOnly cookie validation after authentication.
+        Generate a detailed test to verify login security. Include SQL injection prevention, HTTPS enforcement, and Secure/HttpOnly cookie validation after authentication.
+    - user_query: |
+        Separate the test into several, one for each security validation.
   context:
     preconditions:
       - summary: "Login url valid"

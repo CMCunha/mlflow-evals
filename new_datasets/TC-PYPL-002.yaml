@@ -4,7 +4,7 @@ inputs:
   testing_framework: "playwright"
   iterations:
     - user_query: |
-        Generate a detailed Playwright Python script to perform a full accessibility audit on the ecommerce checkout page using axe-core. Include validation for ARIA attributes, color contrast, and keyboard navigation accessibility. Fail the test if any critical or serious WCAG 2.1 violations are found.
+        Generate a detailed script to perform a full accessibility audit on the ecommerce checkout page (https://shop.polymer-project.org/cart) using axe-core, the html of the checkout page was uplaoded also. Include validation for ARIA attributes, color contrast, and keyboard navigation accessibility. Fail the test if any critical or serious WCAG 2.1 violations are found.
   context:
     preconditions:
       - summary: "Predeploy staging"
@@ -32,6 +32,12 @@ inputs:
           **Acceptance Criteria**:
           - Contrast ratio ≥ 4.5:1 for normal text.
           - No axe-core violations labeled as 'color-contrast'.
+    uploaded_files:
+      - name: "cart.html"
+        path: "new_datasets/docs/cart.html"
+        mime_type: "text/markdown"
+        delete_after_days: 90
+        role: "reference"  
   test_case:
     topic: "accessibility"
     title: "Checkout accessibility compliance"

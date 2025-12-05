@@ -3,21 +3,15 @@ inputs:
   language: "java"
   testing_framework: "playwright"
   iterations:
-    - user_query: "Default payment options"
-    - user_query: "Add another payment option"
-    - user_query: "Add negative payment test case"
+    - user_query: "Generate all tests for the default payment options and make them run with multiple browsers: Chrome and Firefox"
+    - user_query: "Add another payment option so that we can have a better coverage."
+    - user_query: "Can you add also a negative payment test case with a fake payment option that with force the test to fail?"
   context:
     doc_ids: []
     preconditions: []
     coverable_issues: 
       - summary: "Manual test for default payment options"
         description: "Test Objectives:Verify functionality of all offered payment methods (credit card, debit card, net banking, digital wallets etc.). Ensure a secure and encrypted payment process. Check for usability and clarity of the preferred payment flow. Test Steps:Access user account settings (if applicable) or the checkout page.Locate the section for managing payment methods.Add at least two different valid payment methods (e.g., credit card 1, credit card 2).Identify the option to set a default payment method.Select one of the added payment methods as the defaultExpected Result:The chosen payment method is marked as the default (e.g., visually highlighted, displayed first on the list).If access to backend systems is available, verify the successful transaction details.Test Parameterization:Test parameterization is a powerful practice that allows the same test to be executed multiple times with different parameters. Parameters are similar to input values (variables) that can change with each execution.Without the ability to define parameterized tests, all values must be hard-coded into the specification, which makes the test static and difficult to modify. Static tests lead to a lot of redundancy since you need to define and clone the same test for the different combinations of values needed to cover different scenarios or variations of the same test.By extracting the variability of the test specification into a table of test inputs and verifiable outputs, we are effectively doing data-driven testing. Ideally, these tests are automated. However, this might not be always possible or viable and manual tests can take advantage of this methodology as well."
-    uploaded_files:
-      - name: "checkout_spec.txt"
-        path: "datasets/docs/checkout_spec.txt"
-        mime_type: "text/plain"
-        delete_after_days: 90
-        role: "reference"
   current_code: ""
   current_imports: ""
   current_config_file: ""
@@ -26,7 +20,7 @@ inputs:
     title: "Default payment options"
     description: "Manual test for default payment options"
     steps:
-      - step: "Open browser in full screen"
+      - step: "Open ${Browsers} in full screen"
         expected_result: "Browser opens on an empty tab"
         data: "${Browsers}"
       - step: "Navigate to the store URL"

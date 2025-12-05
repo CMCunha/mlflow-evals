@@ -3,7 +3,7 @@ inputs:
   language: "python"
   testing_framework: "playwright"
   iterations:
-    - user_query: "Create a minimal Playwright Python test that verifies the ecommerce homepage loads successfully."
+    - user_query: "Create a minimal test that verifies the ecommerce homepage loads successfully."
   context:
     preconditions: []
     coverable_issues:

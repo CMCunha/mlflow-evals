@@ -1,0 +1,174 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "playwright"
+  iterations:
+    - user_query: |
+        Create a test that verifies a registered user can log in with valid credentials and reach their account dashboard.
+    - user_query: |
+        Make sure to use the login.py page object model file uploaded (that is already part of the tests we already have in our solution) on the tests and use this config.json file (holds the current configurations that are set for this project), the objective is to add onto it but make sure not to ruin what is inside. Finally use the html page provided to find the locators needed.
+    - user_query: |
+        I want to validate with multiple usernames and passwords and multiple expected resuts with one test only (ex: [john,pass1, logged in succesfully], [jane,pass2, error message])
+  context:
+    preconditions:
+      - summary: "Account exists"
+        description: "Valid test user account exists."
+    coverable_issues:
+      - summary: "Login functionality"
+        description: |
+          **Feature**: Users must be able to log in using valid credentials.
+          **Acceptance Criteria**:
+          - Login form accepts valid credentials.
+          - Redirect occurs to the user dashboard.
+      - summary: "Error handling"
+        description: |
+          **Feature**: Application must gracefully reject invalid credentials.
+          **Acceptance Criteria**:
+          - Error message appears without page crash.
+    uploaded_files:
+      - name: "login.py"
+        path: "new_datasets/docs/login.py"
+        mime_type: "text/x-python"
+        delete_after_days: 90
+        role: "reference"
+      - name: "config.json"
+        path: "new_datasets/docs/config.json"
+        mime_type: "application/json"
+        delete_after_days: 90
+        role: "reference"
+      - name: "login.html"
+        path: "new_datasets/docs/login.html"
+        mime_type: "text/markdown"
+        delete_after_days: 90
+        role: "reference"
+  test_case:
+    topic: "authentication"
+    title: "Unsuccesful login"
+    description: "Verify that the applciation rejects gracefully invalid credentials."
+    steps:
+      - step: "Navigate to login page"
+        expected_result: "Login form displayed"
+        data: "${Base_URL}/login"
+      - step: "Enter username and password"
+        expected_result: "Credentials accepted"
+        data: "username=${username}; password=${password}"
+      - step: "Click login"
+        expected_result: "An error message is shown."
+        data: "button=button[type=submit]"
+expectations:
+  code: |
+        import pytest
+        from playwright.async_api import Page, expect
+        import os
+        import shutil
+
+        # Import the Page Object Model class
+        from models.login_page import LoginPage # Adjust the import path as needed
+
+        # --- Define the Test Module (Equivalent to test.describe) ---
+
+        # Since Pytest uses function names for test descriptions,
+        # we structure the tests within a module or a class.
+        # We will use the standard Pytest function structure here.
+
+        # Note: The 'page' fixture is automatically provided by pytest-playwright.
+        # The 'playwright_testinfo' fixture provides the test metadata equivalent to 'testInfo'.
+
+        @pytest.mark.asyncio
+        async def test_login_with_valid_credentials(page: Page, playwright_testinfo):
+            """
+            Test case for successful login validation.
+            """
+            login_page = LoginPage(page)
+            await login_page.navigate()
+            await login_page.login("demo", "mode")
+            name = await login_page.get_inner_text()
+
+            # --- Adding Xray properties (Using playwright_testinfo.annotations) ---
+            # Python uses a simple list of dictionaries for annotations
+            playwright_testinfo.annotations.extend([
+                # {'type': 'test_key', 'description': 'COM-17'}, # Uncomment if needed
+                {'type': 'test_summary', 'description': 'Successful login.'},
+                # {'type': 'requirements', 'description': 'COM-1'}, # Uncomment if needed
+                {'type': 'test_description', 'description': 'Validate that the login is successful.'},
+            ])
+
+            # --- Capture a screenshot and attach it ---
+            # 1. Determine the output directory using temp_path (similar to testInfo.outputPath)
+            # Note: We ensure the directory exists first.
+            output_dir = playwright_testinfo.worker_info.project.output_dir
+            os.makedirs(output_dir, exist_ok=True)
+            
+            # Create a path for the screenshot
+            path = os.path.join(output_dir, 'screenshot_valid.png')
+            await page.screenshot(path=path)
+            
+            # 2. Attach the file using playwright_testinfo.attachments
+            playwright_testinfo.attachments.append({
+                'name': 'screenshot_valid.png',
+                'path': path,
+                'contentType': 'image/png'
+            })
+            
+            # --- Assertion (Using standard Python 'assert' or Playwright 'expect') ---
+            # Using simple assert for string comparison (equivalent to .toBe)
+            assert name == 'Login succeeded. Now you can logout.'
+
+
+        @pytest.mark.asyncio
+        async def test_login_with_invalid_credentials(page: Page, playwright_testinfo):
+            """
+            Test case for unsuccessful login validation.
+            """
+            login_page = LoginPage(page)
+            await login_page.navigate()
+            await login_page.login("demo", "mode1") # Incorrect password
+            name = await login_page.get_inner_text()
+
+            # --- Adding Xray properties (Using playwright_testinfo.annotations) ---
+            playwright_testinfo.annotations.extend([
+                # {'type': 'test_key', 'description': 'COM-9'}, # Uncomment if needed
+                {'type': 'test_summary', 'description': 'Unsuccessful login.'},
+                # {'type': 'requirements', 'description': 'COM-1'}, # Uncomment if needed
+                {'type': 'test_description', 'description': 'Validate that the login is unsuccessful.'},
+            ])
+
+            # --- Capture a screenshot and attach it ---
+            output_dir = playwright_testinfo.worker_info.project.output_dir
+            os.makedirs(output_dir, exist_ok=True)
+            
+            path = os.path.join(output_dir, 'screenshot_invalid.png')
+            await page.screenshot(path=path)
+            
+            playwright_testinfo.attachments.append({
+                'name': 'screenshot_invalid.png',
+                'path': path,
+                'contentType': 'image/png'
+            })
+
+            # --- Assertion ---
+            assert name == 'Login failed. Invalid user name and/or passwords.'
+  imports: |
+        ```python
+        import pytest
+        import json
+        from playwright.async_api import Page, expect
+        ```
+  config_file: |
+        [tool.poetry]
+        name = "playwright-ai-project"
+        version = "0.1.0"
+        description = "AI Feature Testing for Xray"
+        authors = ["Your Name <you@example.com>"]
+        readme = "README.md"
+        packages = [{include = "models"}] # Tells Poetry where your Python code (like login_page.py) lives
+
+        [tool.poetry.dependencies]
+        python = "^3.11" # Specify your Python version
+        pytest = "^7.4.0"
+        playwright = "^1.40.0"
+        # Add other dependencies like requests, numpy, etc., here if needed
+
+        [build-system]
+        requires = ["poetry-core"]
+        build-backend = "poetry.core.masonry.api"

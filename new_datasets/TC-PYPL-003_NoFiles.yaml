@@ -4,7 +4,7 @@ inputs:
   testing_framework: "playwright"
   iterations:
     - user_query: |
-        Create a test that verifies a registered user can log in with valid credentials and reach their account dashboard. This test must use the login.py page object model file that is part of the actual solution and make sure to add any configuration needed in the config.json file that I uploaded so that we do not break other tests already present abut this new one also works.
+        Create a test that verifies a registered user can log in with valid credentials and reach their account dashboard.
   context:
     preconditions:
       - summary: "Account exists"
@@ -21,20 +21,9 @@ inputs:
           **Feature**: Application must gracefully reject invalid credentials.
           **Acceptance Criteria**:
           - Error message appears without page crash.
-    uploaded_files:
-      - name: "login.py"
-        path: "new_datasets/docs/login.py"
-        mime_type: "text/x-python"
-        delete_after_days: 90
-        role: "reference"
-      - name: "config.json"
-        path: "new_datasets/docs/config.json"
-        mime_type: "application/json"
-        delete_after_days: 90
-        role: "reference"
   test_case:
     topic: "authentication"
-    title: "Successful login"
+    title: "Successful login no files"
     description: "Verify user can log in successfully."
     steps:
       - step: "Navigate to login page"

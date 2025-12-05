@@ -39,7 +39,7 @@ def upload_to_rag(file_entry):
         'x-provider': os.environ.get('SEMBIIQ_PROVIDER', None),
         'x-llm-key': os.environ.get('SEMBIIQ_LLM_KEY', None),
         'x-model-id': os.environ.get('SEMBIIQ_MODEL_ID', None),
-        'x-advanced-tracing': str(os.environ.get('SEMBIIQ_ADVANCED_TRACING', 'false')).lower(),
+        'x-advanced-tracing': str(os.environ.get('SEMBIIQ_ADVANCED_TRACING', 'true')).lower(),
     }
 
     payload = {

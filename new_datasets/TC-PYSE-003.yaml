@@ -4,7 +4,7 @@ inputs:
   testing_framework: "selenium"
   iterations:
     - user_query: |
-        Generate a Selenium Python test that adds a product to the shopping cart and verifies the cart count updates.
+        Generate a test that adds a product to the shopping cart and verifies the cart count updates.
   context:
     preconditions:
       - summary: "Catalog available"

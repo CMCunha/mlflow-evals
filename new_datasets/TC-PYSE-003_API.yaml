@@ -1,0 +1,42 @@
+inputs:
+  chat_id: ""
+  language: "python"
+  testing_framework: "selenium"
+  iterations:
+    - user_query: |
+        Generate tests that validates the bookcart API present in https://bookcart.azurewebsites.net/swagger/index.html (json attached to as a pdf file). 
+  context:
+    coverable_issues:
+      - summary: "Swagger available and working"
+        description: |
+          **Feature**: Users can do multiple operations using swagger.
+          **Acceptance Criteria**:
+          - Accessing https://bookcart.azurewebsites.net/swagger/index.html will show a page with all operations available.
+          - All methods from the API have a positive and negative test.
+    uploaded_files:
+      - name: "swagger.json"
+        path: "new_datasets/docs/swagger.json"
+        mime_type: "application/json"
+        delete_after_days: 90
+        role: "reference"
+  test_case:
+    topic: "ecommerce"
+    title: "Add books test using the PUT operation to https://bookcart.azurewebsites.net/api/Book"
+    description: "Verify cart counter increments when adding books."
+    steps:
+      - step: "Add books using the PUT operation of the API"
+        expected_result: "A new book is added"
+      - step: "Login using the api/login endpoint"
+        expected_result: "User is logged in"
+      - step: "Add a book to the shopping cart using the /api/ShoppingCart/{userId}/{bookId}"
+        expected_result: "The book is added to the shopping cart of the user"
+      - step: "Get the shopping cart of the user using the https://bookcart.azurewebsites.net/api/ShoppingCart/{userId}"
+        expected_result: "The book is listed on the shopping cart"
+expectations:
+  code: |
+        
+  imports: |
+        from selenium import webdriver
+  config_file: |
+        baseURL=https://example-store.com/product/123
+        browser=chrome
